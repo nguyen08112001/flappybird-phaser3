@@ -10,6 +10,7 @@ enum TextureKeys {
     StartButton = 'start-button',
     Instruction = 'instruction',
     RestartButton = 'restart-button',
+    Enemy = 'Enemy'
 }
 
 export default TextureKeys

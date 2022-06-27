@@ -19,6 +19,7 @@ export default class Preloader extends Phaser.Scene {
         this.load.image(TextureKeys.Name, './assets/image/img_name.png')
         this.load.image(TextureKeys.Instruction, './assets/image/img_instruction.png')
         this.load.image(TextureKeys.RestartButton, './assets/image/img_restart.png')
+        this.load.image(TextureKeys.Enemy, './assets/image/img_enemy.png')
 
         this.load.atlas(
             TextureKeys.Bird,

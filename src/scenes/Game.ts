@@ -8,13 +8,15 @@ import PipeUp from "../game/PipeUp"
 import PipeDown from "../game/PipeDown"
 import ScoreManager from "../game/ScoreManager"
 import SoundKeys from "../consts/SoundKeys"
+import Ufo from "../game/Ufo"
 // import InputManager from "../inputManager/InputManager"
 
 export default class Game extends Phaser.Scene {
     private background! : Phaser.GameObjects.TileSprite
     private pipes!: Phaser.Physics.Arcade.StaticGroup
     private timer!: Phaser.Time.TimerEvent;
-    public bird! : Bird;
+    private bird! : Bird;
+    private ufo! : Ufo;
     private scoreManager!: ScoreManager
     // private inputManager!: InputManager
     constructor() {
@@ -42,7 +44,7 @@ export default class Game extends Phaser.Scene {
         this.background = this.add.tileSprite(0, 0, width, height, TextureKeys.Background)
             .setOrigin(0)
             .setScrollFactor(0, 0)
-            .setScale(2)
+            .setScale(1)
 
         
         this.physics.world.setBounds(
@@ -53,12 +55,14 @@ export default class Game extends Phaser.Scene {
 
         //create pipe
         this.pipes = this.physics.add.staticGroup()
-        this.createPipes()
+        this.createPipes(4)
         // this.spawnPipes()
 
         //create bird
         this.bird = new Bird(this, width*0.5, height*0.5)
 
+        //create ufo
+        this.ufo = new Ufo(this, width*0.5, height*0.5)
 
         //create score
         this.scoreManager = new ScoreManager(this,0,0)
@@ -83,6 +87,7 @@ export default class Game extends Phaser.Scene {
 
     update(t: number, dt: number) {
         // this.wrapPipe()
+        console.log(dt)
         this.testWrapPipe()
         this.increaseScore()
         this.setPipeLevel()
@@ -105,7 +110,9 @@ export default class Game extends Phaser.Scene {
     private increaseScore() {
         this.pipes.children.each( child => {
             let pipe = child as Phaser.Physics.Arcade.Sprite
-            if (pipe.x < this.bird.x && this.bird.x < pipe.x + 5) {
+            if (!pipe.active) return
+            if (pipe.x < this.bird.x) {
+                pipe.setActive(false)
                 this.scoreManager.updateScore(this)
             }
         })
@@ -137,6 +144,9 @@ export default class Game extends Phaser.Scene {
 
                     pair[1].x = rightEdge
                     pair[1].y = tmp + 800
+
+                    pair[0].active = true
+                    pair[1].active = true
                     this.physics.add.overlap(
                         pair,
                         this.bird,
@@ -181,16 +191,16 @@ export default class Game extends Phaser.Scene {
     //     })
     // }
 
-    private createPipes() {
+    private createPipes(numpipe: number) {
         const scrollX = this.cameras.main.scrollX
         const rightEdge = scrollX + this.scale.width
 
         let x = rightEdge
 
-        for (let i = 0; i < 3; i++) {
+        for (let i = 0; i < numpipe; i++) {
             let tmp = Phaser.Math.Between(-400, 0)
             this.addPipe(x,tmp)
-            x += this.scale.width / 2.8
+            x += this.scale.width / (numpipe-0.2)
         }
         
         

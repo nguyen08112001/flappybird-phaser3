@@ -10,7 +10,8 @@ export default class PipeDown extends PipeObstacle {
 
         const bottom = scene.add.image(0, 0, TextureKeys.PipeDown)
             .setOrigin(0.5, 0)
-            .setScale(3)
+            .setScale(2)
+            .setDisplaySize(50, 500)
 
         this.add(bottom)
 

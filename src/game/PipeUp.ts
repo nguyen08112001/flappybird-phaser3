@@ -10,7 +10,7 @@ export default class PipeUp extends PipeObstacle {
 
         const top = scene.add.image(0, 0, TextureKeys.PipeUp)
             .setOrigin(0.5, 0)
-            .setScale(3)
+            .setScale(2)
 
         this.add(top)
 

@@ -87,7 +87,7 @@ export default class Bird extends Phaser.GameObjects.Container {
     flap() {
         this.flySound.play()
         this.body.setVelocityY(-600)
-        this.body.setAccelerationY(-100)
+        // this.body.setAccelerationY(-100)
         this.scene.tweens.add({
             targets: this,
             props: { angle: -30 },

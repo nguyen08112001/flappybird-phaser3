@@ -18,7 +18,7 @@ export default class GameStart extends Phaser.Scene {
         this.background = this.add.tileSprite(0, 0, width, height, TextureKeys.Background)
             .setOrigin(0)
             .setScrollFactor(0, 0)
-            .setScale(2)
+            .setScale(1)
 
         this.add.image(this.scale.width/2, this.scale.height / 5,TextureKeys.Name)
             .setOrigin(0.5)

@@ -1,6 +1,7 @@
 import Phaser from 'phaser'
 import Game from './scenes/Game'
 import GameOver from './scenes/GameOver'
+import GameStart from './scenes/GameStart'
 import Preloader from './scenes/Preloader'
 
 const config: Phaser.Types.Core.GameConfig = {
@@ -11,10 +12,13 @@ const config: Phaser.Types.Core.GameConfig = {
 		default: 'arcade',
 		arcade: {
 			gravity: { y: 300 },
-			debug: true
+			debug: false
 		}
 	},
-	scene: [Preloader, Game, GameOver]
+	// audio: {
+    //     disableWebAudio: true
+    // },
+	scene: [Preloader, GameStart, Game, GameOver]
 }
 
 export default new Phaser.Game(config)

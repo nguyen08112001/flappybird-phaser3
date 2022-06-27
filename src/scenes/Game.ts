@@ -1,13 +1,14 @@
 import Phaser from "phaser"
-import TextureKeys from "~/consts/TextureKeys"
+import TextureKeys from "../consts/TextureKeys"
 import SceneKeys from '../consts/SceneKeys'
 import AnimationKeys from "../consts/AnimationKeys"
 import Bird from "../game/Bird"
-import PipeObstacle from "~/game/PipeObstacle"
-import PipeUp from "~/game/PipeUp"
-import PipeDown from "~/game/PipeDown"
-import ScoreManager from "~/game/ScoreManager"
-// import InputManager from "~/inputManager/InputManager"
+import PipeObstacle from "../game/PipeObstacle"
+import PipeUp from "../game/PipeUp"
+import PipeDown from "../game/PipeDown"
+import ScoreManager from "../game/ScoreManager"
+import SoundKeys from "../consts/SoundKeys"
+// import InputManager from "../inputManager/InputManager"
 
 export default class Game extends Phaser.Scene {
     private background! : Phaser.GameObjects.TileSprite
@@ -76,6 +77,7 @@ export default class Game extends Phaser.Scene {
             undefined,
             this
         )
+
             
     }
 
@@ -91,8 +93,12 @@ export default class Game extends Phaser.Scene {
     private setPipeLevel() {
         this.pipes.children.each( child => {
             let pipe = child as PipeObstacle
-            if (this.scoreManager.getScore() == 5)
+            if (this.scoreManager.getScore() === 0) {
                 pipe.setRepeat()
+            }
+            // if (this.scoreManager.getScore() === 3)
+                // pipe.setFlipX()
+            
         })
     }
 

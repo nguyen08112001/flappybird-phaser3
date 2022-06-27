@@ -1,11 +1,11 @@
-import TextureKeys from '~/consts/TextureKeys';
+import TextureKeys from '../consts/TextureKeys';
 import Phaser from "phaser"
 import PipeObstacle from './PipeObstacle';
 
 export default class PipeDown extends PipeObstacle {
     private gap = 200
     body! : Phaser.Physics.Arcade.StaticBody
-    constructor(scene, x: number, y: number) {
+    constructor(scene: Phaser.Scene, x: number, y: number) {
         super(scene,x,y)
 
         const bottom = scene.add.image(0, 0, TextureKeys.PipeDown)

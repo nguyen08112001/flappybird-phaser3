@@ -5,7 +5,11 @@ enum TextureKeys {
     PipeDown = 'pipe-down',
     Pipe = 'pipe',
     GameOver = 'game-over',
-    ScoreBoard = 'score-board'
+    ScoreBoard = 'score-board',
+    Name = 'name',
+    StartButton = 'start-button',
+    Instruction = 'instruction',
+    RestartButton = 'restart-button',
 }
 
 export default TextureKeys

@@ -22,7 +22,7 @@ export default class Bird extends Phaser.GameObjects.Container {
         super(scene, x, y)
         
         this.bird = scene.add.sprite(0, 0, TextureKeys.Bird)
-            .setOrigin(0.5, 1)
+            .setOrigin(0.5, 0.5)
             .play(AnimationKeys.BirdFly)
             .setScale(0.6)
         this.add(this.bird)
@@ -34,7 +34,7 @@ export default class Bird extends Phaser.GameObjects.Container {
         scene.physics.add.existing(this)
 
         this.body.setSize(this.bird.width*0.5, this.bird.height*0.5)
-        this.body.setOffset(this.bird.width*-0.5+50, -this.bird.height+50)
+        this.body.setOffset(this.bird.width*-0.5+50, -this.bird.height+100)
         this.body.setGravityY(1500)
 
         this.cursors = scene.input.keyboard.createCursorKeys()

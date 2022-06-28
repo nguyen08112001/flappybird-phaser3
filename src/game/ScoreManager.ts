@@ -59,7 +59,7 @@ export default class ScoreManager extends Phaser.GameObjects.Container {
     }
     
     public viewScore(scene: Phaser.Scene) {
-        this.titleBitmapText.destroy()
+        // this.titleBitmapText.destroy()
 
         // scene.add.text(scene.scale.width/2, scene.scale.height / 5 + 200, 'Score: ' + this.value +'\nBest: ' + this.best, {
         //     fontSize: '50px',
@@ -73,10 +73,18 @@ export default class ScoreManager extends Phaser.GameObjects.Container {
         //     .setScrollFactor(0)
 
         scene.add.bitmapText(
-            scene.scale.width/2, scene.scale.height / 5 + 200,
+            scene.scale.width/3, scene.scale.height / 5 + 200,
                 'font',
                 'SCORE: ' + this.value +'\nBEST: ' + this.best,
                 30
+            ).setScrollFactor(0)
+            .setOrigin(0.5, 0)
+            
+        scene.add.bitmapText(
+            scene.scale.width/1.5, scene.scale.height / 1.5,
+                'font',
+                'STUPID BOY',
+                70
             ).setScrollFactor(0)
             .setOrigin(0.5, 0)
     } 

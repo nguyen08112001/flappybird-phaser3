@@ -10,7 +10,9 @@ enum TextureKeys {
     StartButton = 'start-button',
     Instruction = 'instruction',
     RestartButton = 'restart-button',
-    Enemy = 'Enemy'
+    Ufo = 'ufo',
+    EnemyBullet = 'enemy-bullet',
+    TrollFace = 'troll-face'
 }
 
 export default TextureKeys

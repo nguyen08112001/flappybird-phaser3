@@ -19,12 +19,18 @@ export default class Preloader extends Phaser.Scene {
         this.load.image(TextureKeys.Name, './assets/image/img_name.png')
         this.load.image(TextureKeys.Instruction, './assets/image/img_instruction.png')
         this.load.image(TextureKeys.RestartButton, './assets/image/img_restart.png')
-        this.load.image(TextureKeys.Enemy, './assets/image/img_enemy.png')
+        this.load.image(TextureKeys.Ufo, './assets/image/img_enemy.png')
+        this.load.image(TextureKeys.TrollFace, './assets/image/img_troll_face.png')
 
         this.load.atlas(
             TextureKeys.Bird,
             './assets/image/bird.png',
             './assets/image/bird.json'
+        )
+        this.load.atlas(
+            TextureKeys.EnemyBullet,
+            './assets/image/img_ufo_bullet.png',
+            './assets/image/img_ufo_bullet.json'
         )
 
         //load audio
@@ -46,6 +52,18 @@ export default class Preloader extends Phaser.Scene {
                 suffix: '.png'
             }),
             frameRate: 10,
+            repeat: -1
+        })
+        
+        this.anims.create({
+            key: AnimationKeys.UfoBullet,
+            frames: this.anims.generateFrameNames(TextureKeys.EnemyBullet, {
+                start: 1,
+                end: 2,
+                prefix:'frame',
+                suffix: '.png'
+            }),
+            frameRate: 5,
             repeat: -1
         })
 

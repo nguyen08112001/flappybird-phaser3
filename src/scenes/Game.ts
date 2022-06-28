@@ -9,6 +9,7 @@ import PipeDown from "../game/PipeDown"
 import ScoreManager from "../game/ScoreManager"
 import SoundKeys from "../consts/SoundKeys"
 import Ufo from "../game/Ufo"
+import UfoBullet from "../game/UfoBullet"
 // import InputManager from "../inputManager/InputManager"
 
 export default class Game extends Phaser.Scene {
@@ -17,6 +18,7 @@ export default class Game extends Phaser.Scene {
     private timer!: Phaser.Time.TimerEvent;
     private bird! : Bird;
     private ufo! : Ufo;
+    private ufoBullet!: UfoBullet
     private scoreManager!: ScoreManager
     // private inputManager!: InputManager
     constructor() {
@@ -62,8 +64,8 @@ export default class Game extends Phaser.Scene {
         this.bird = new Bird(this, width*0.5, height*0.5)
 
         //create ufo
-        this.ufo = new Ufo(this, width*0.5, height*0.5)
-
+        this.ufo = new Ufo(this, width*1.2, height*0.5)
+        this.ufoBullet = new UfoBullet(this, this.ufo.x, this.ufo.y)
         //create score
         this.scoreManager = new ScoreManager(this,0,0)
 
@@ -72,6 +74,22 @@ export default class Game extends Phaser.Scene {
         this.cameras.main.startFollow(this.bird, undefined, undefined, undefined, -500)
         this.cameras.main.setBounds(0 ,0, Number.MAX_SAFE_INTEGER, height)
 
+        
+    }
+
+    update(t: number, dt: number) {
+        // this.wrapPipe()
+        this.testWrapPipe()
+        this.wrapUfoBullet()
+        this.increaseScore()
+        this.setPipeLevel()
+        this.setCollide()
+        // this.shoot()
+        // this.background.setTilePosition(this.cameras.main.scrollX)
+        this.background.tilePositionX += 1
+    }
+
+    private setCollide() {
         this.physics.add.overlap(
             this.pipes,
             this.bird,
@@ -81,24 +99,46 @@ export default class Game extends Phaser.Scene {
             undefined,
             this
         )
-
+        
+        this.physics.add.collider(
+            this.ufoBullet,
+            this.bird,
+            () => {
+                this.setGameOver()
+            },
+            undefined,
+            this
+        )
+        
             
     }
 
-    update(t: number, dt: number) {
-        // this.wrapPipe()
-        console.log(dt)
-        this.testWrapPipe()
-        this.increaseScore()
-        this.setPipeLevel()
-        // this.background.setTilePosition(this.cameras.main.scrollX)
-        this.background.tilePositionX += 1
+    private wrapUfoBullet() {
+        const scrollX = this.cameras.main.scrollX
+        const rightEdge = scrollX + this.scale.width
+
+        if (this.ufoBullet.x + this.ufoBullet.width < scrollX) {
+                this.ufoBullet.x = this.ufo.x
+                this.ufoBullet.y = this.ufo.y
+                this.ufoBullet.reset()
+                // this.ufoBullet.body.updateFromGameObject()
+                // this.physics.add.overlap(
+                //     this.ufoBullet,
+                //     this.bird,
+                //     () => {
+                //         this.setGameOver()
+                //     },
+                //     undefined,
+                //     this
+                // )
+        }
+        // this.setCollide()
     }
 
     private setPipeLevel() {
         this.pipes.children.each( child => {
             let pipe = child as PipeObstacle
-            if (this.scoreManager.getScore() === 0) {
+            if (this.scoreManager.getScore() === 5) {
                 pipe.setRepeat()
             }
             // if (this.scoreManager.getScore() === 3)
@@ -258,5 +298,20 @@ export default class Game extends Phaser.Scene {
         this.bird.kill()
         this.scoreManager.viewScore(this)
         this.scene.run(SceneKeys.GameOver)
+    }
+
+    private shoot() {
+        const bullet = new UfoBullet(this, this.ufo.x, this.ufo.y)
+        this.physics.add.overlap(
+            bullet,
+            this.bird,
+            () => {
+                this.setGameOver()
+            },
+            undefined,
+            this
+        )
+        // this.ufoBullet.x  = this.ufo.x
+        // this.ufoBullet.x  = this.ufo.x
     }
 }

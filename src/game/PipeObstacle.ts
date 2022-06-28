@@ -13,7 +13,7 @@ export default class PipeObstacle extends Phaser.GameObjects.Container {
             y: '-=150',
             ease: 'Sine.easeInOut',
             yoyo: true,
-            repeat: 3
+            repeat: -1
         });
     }
 

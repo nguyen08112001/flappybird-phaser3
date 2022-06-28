@@ -53,13 +53,15 @@ export default class ScoreManager extends Phaser.GameObjects.Container {
         this.scoreSound.play()
         this.value += 0.5
         // this.scoreLabel.text = 'Score: ' + this.value
+        if (this.titleBitmapText) {
         this.titleBitmapText.text = 'SCORE: ' + this.value
+        }
         this.best = Math.max(this.value, this.best)
         localStorage.setItem('best', this.best + '')
     }
     
     public viewScore(scene: Phaser.Scene) {
-        // this.titleBitmapText.destroy()
+        this.titleBitmapText.destroy()
 
         // scene.add.text(scene.scale.width/2, scene.scale.height / 5 + 200, 'Score: ' + this.value +'\nBest: ' + this.best, {
         //     fontSize: '50px',

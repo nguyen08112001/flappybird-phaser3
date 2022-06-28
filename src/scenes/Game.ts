@@ -78,6 +78,7 @@ export default class Game extends Phaser.Scene {
     }
 
     update(t: number, dt: number) {
+        if (this.bird.isDead == true) return
         // this.wrapPipe()
         this.testWrapPipe()
         this.wrapUfoBullet()

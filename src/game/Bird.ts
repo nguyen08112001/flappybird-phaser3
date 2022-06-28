@@ -16,7 +16,7 @@ export default class Bird extends Phaser.GameObjects.Container {
     private flySound: Phaser.Sound.BaseSound
     private hitSound: Phaser.Sound.BaseSound
     //variable
-    private isDead: boolean;
+    public isDead: boolean;
     private isFlapping: boolean;
     constructor(scene: Phaser.Scene, x: number, y: number) {
         super(scene, x, y)

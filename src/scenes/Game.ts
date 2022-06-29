@@ -10,6 +10,7 @@ import ScoreManager from "../game/ScoreManager"
 import SoundKeys from "../consts/SoundKeys"
 import Ufo from "../game/Ufo"
 import UfoBullet from "../game/UfoBullet"
+import Shield from "../game/Shield"
 // import InputManager from "../inputManager/InputManager"
 
 export default class Game extends Phaser.Scene {
@@ -20,6 +21,7 @@ export default class Game extends Phaser.Scene {
     private ufo! : Ufo;
     private ufoBullet!: UfoBullet
     private scoreManager!: ScoreManager
+    private shield!: Shield
     // private inputManager!: InputManager
     constructor() {
         super(SceneKeys.Game)
@@ -40,7 +42,6 @@ export default class Game extends Phaser.Scene {
 
         //create input
         // this.inputManager = new InputManager(this)
-
 
         //create background
         this.background = this.add.tileSprite(0, 0, width, height, TextureKeys.Background)
@@ -66,27 +67,42 @@ export default class Game extends Phaser.Scene {
         //create ufo
         this.ufo = new Ufo(this, width*1.2, height*0.5)
         this.ufoBullet = new UfoBullet(this, this.ufo.x, this.ufo.y)
+        
         //create score
         this.scoreManager = new ScoreManager(this,0,0)
 
+        //create shield
+        this.shield = new Shield(this, width, height*0.5)
 
         //camera
         this.cameras.main.startFollow(this.bird, undefined, undefined, undefined, -500)
         this.cameras.main.setBounds(0 ,0, Number.MAX_SAFE_INTEGER, height)
-
         
+        //start music
+        let music = this.sound.add(SoundKeys.Music)
+        music.play({
+            volume: 0.2,
+            loop: true
+        })
+        
+        //loop event
+        this.time.addEvent({
+            delay: 10000,                // ms
+            callback: this.spawnShield,
+            //args: [],
+            callbackScope: this,
+            loop: true
+        });
+
     }
 
     update(t: number, dt: number) {
         if (this.bird.isDead == true) return
-        // this.wrapPipe()
         this.testWrapPipe()
         this.wrapUfoBullet()
         this.increaseScore()
-        this.setPipeLevel()
+        this.setGameLevel()
         this.setCollide()
-        // this.shoot()
-        // this.background.setTilePosition(this.cameras.main.scrollX)
         this.background.tilePositionX += 1
     }
 
@@ -101,7 +117,7 @@ export default class Game extends Phaser.Scene {
             this
         )
         
-        this.physics.add.collider(
+        this.physics.add.overlap(
             this.ufoBullet,
             this.bird,
             () => {
@@ -111,7 +127,36 @@ export default class Game extends Phaser.Scene {
             this
         )
         
+        this.physics.add.overlap(
+            this.shield,
+            this.bird,
+            () => {
+                // this.bird.body.checkCollision.none = true;
+                // this.time.delayedCall(6000, () => {
+                //     this.bird.body.checkCollision.none = false;
+                //     this.bird.setShield(false)
+                //     // this.shield.setDisable
+                // }, [], this);  // delay in ms
+
+                
+                this.bird.setShield(true)
+                this.shield.setDisable()
+            },
+            undefined,
+            this
+
+        )
+        
+        
             
+    }
+
+    private spawnShield() {
+        console.log(234)
+        const scrollX = this.cameras.main.scrollX
+        const rightEdge = scrollX + this.scale.width
+        this.shield.x = rightEdge
+        this.shield.setEnable()
     }
 
     private wrapUfoBullet() {
@@ -122,35 +167,22 @@ export default class Game extends Phaser.Scene {
                 this.ufoBullet.x = this.ufo.x
                 this.ufoBullet.y = this.ufo.y
                 this.ufoBullet.reset()
-                // this.ufoBullet.body.updateFromGameObject()
-                // this.physics.add.overlap(
-                //     this.ufoBullet,
-                //     this.bird,
-                //     () => {
-                //         this.setGameOver()
-                //     },
-                //     undefined,
-                //     this
-                // )
         }
-        // this.setCollide()
     }
 
-    private setPipeLevel() {
-        this.pipes.children.each( child => {
-            let pipe = child as PipeObstacle
-            if (this.scoreManager.getScore() === 5) {
-                pipe.setRepeat()
-            }
-            // if (this.scoreManager.getScore() === 3)
-                // pipe.setFlipX()
-            
-        })
+    private setGameLevel () {
+        if (this.scoreManager.getScore() === 5) {
+            this.pipes.children.each( child => {
+                let pipe = child as PipeObstacle
+                    pipe.setRepeat()
+            })
+        }        
     }
 
     private increaseScore() {
         this.pipes.children.each( child => {
             let pipe = child as Phaser.Physics.Arcade.Sprite
+
             if (!pipe.active) return
             if (pipe.x < this.bird.x) {
                 pipe.setActive(false)
@@ -204,34 +236,6 @@ export default class Game extends Phaser.Scene {
         
     }
 
-    // private wrapPipe() {
-    //     let pair: any[] = []
-    //     const scrollX =  this.cameras.main.scrollX
-    //     const rightEdge = scrollX + this.scale.width
-        
-    //     this.pipes.children.each( child => {
-    //         const pipe = child as Phaser.Physics.Arcade.Sprite
-
-    //         if (pipe.x + pipe.width < scrollX) {
-    //             pair.push(pipe)
-    //             if (pair.length === 2) {
-    //                 let tmp = Phaser.Math.Between(-200, this.scale.height - 600)
-    //                 pair[0].x = rightEdge
-    //                 pair[0].y = tmp
-
-    //                 pair[1].x = rightEdge
-    //                 pair[1].y = tmp + 800
-    //                 pair = []
-    //             }
-    //         }
-    //         const body = pipe.body as Phaser.Physics.Arcade.StaticBody
-    //         body.enable = true
-    //         body.updateFromGameObject()
-
-
-    //     })
-    // }
-
     private createPipes(numpipe: number) {
         const scrollX = this.cameras.main.scrollX
         const rightEdge = scrollX + this.scale.width
@@ -247,45 +251,6 @@ export default class Game extends Phaser.Scene {
         
     }
 
-    // private spawnPipes() {
-    //     const scrollX = this.cameras.main.scrollX
-    //     const rightEdge = scrollX + this.scale.width
-
-    //     let x = rightEdge
-
-    //     for (let i = 0; i < 4; i++) {
-    //         const pipeUp =  this.pipes.get(
-    //             x,
-    //             Phaser.Math.Between(-200, this.scale.height -600),
-    //             TextureKeys.PipeUp
-    //         ) as Phaser.Physics.Arcade.Sprite
-    //         pipeUp.setScale(3)
-    //         // this.pipes.create
-    //         const pipeDown =  this.pipes.get(
-    //             x,
-    //             pipeUp.y + pipeUp.displayHeight + 300,
-    //             TextureKeys.PipeDown
-    //         ) as Phaser.Physics.Arcade.Sprite
-    //         pipeDown.setScale(3)
-
-    //         pipeUp.setVisible(true)
-    //         pipeUp.setActive(true)
-            
-    //         pipeDown.setVisible(true)
-    //         pipeDown.setActive(true)
-
-    //         const body1 = pipeUp.body as Phaser.Physics.Arcade.StaticBody
-    //         body1.enable = true
-    //         body1.updateFromGameObject()
-            
-    //         const body2 = pipeDown.body as Phaser.Physics.Arcade.StaticBody
-    //         body2.enable = true
-    //         body2.updateFromGameObject()
-
-    //         x += pipeUp.width + this.scale.width / 4.2
-    //     }
-    // }
-
     private addPipe(x: number, y: number) {
         this.pipes.add(
             new PipeUp(this, x, y)
@@ -296,23 +261,25 @@ export default class Game extends Phaser.Scene {
     }
 
     private setGameOver() {
-        this.bird.kill()
-        this.scoreManager.viewScore(this)
-        this.scene.run(SceneKeys.GameOver)
+        if (this.bird.isDead) return
+
+        if (!this.bird.hasShield) {
+            this.bird.kill()
+            this.scoreManager.viewScore(this)
+            this.sound.pauseAll()
+            this.sound.play(SoundKeys.Hit)
+            this.sound.play(SoundKeys.Die)
+            this.scene.run(SceneKeys.GameOver)
+        } else {
+            this.bird.body.checkCollision.none = true;
+                this.time.delayedCall(500, () => {
+                    this.bird.body.checkCollision.none = false;
+                    this.bird.setShield(false)
+                    // this.shield.setDisable
+                }, [], this);  // delay in ms
+            this.bird.setShield(false)
+            this.shield.setDisable()
+        }
     }
 
-    private shoot() {
-        const bullet = new UfoBullet(this, this.ufo.x, this.ufo.y)
-        this.physics.add.overlap(
-            bullet,
-            this.bird,
-            () => {
-                this.setGameOver()
-            },
-            undefined,
-            this
-        )
-        // this.ufoBullet.x  = this.ufo.x
-        // this.ufoBullet.x  = this.ufo.x
-    }
 }

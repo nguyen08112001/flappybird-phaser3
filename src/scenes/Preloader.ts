@@ -21,6 +21,7 @@ export default class Preloader extends Phaser.Scene {
         this.load.image(TextureKeys.RestartButton, './assets/image/img_restart.png')
         this.load.image(TextureKeys.Ufo, './assets/image/img_enemy.png')
         this.load.image(TextureKeys.TrollFace, './assets/image/img_troll_face.png')
+        this.load.image(TextureKeys.Shield, './assets/image/img_shield.png')
 
         this.load.atlas(
             TextureKeys.Bird,
@@ -37,6 +38,8 @@ export default class Preloader extends Phaser.Scene {
         this.load.audio(SoundKeys.Fly, './assets/sounds/fly.mp3')
         this.load.audio(SoundKeys.Score, './assets/sounds/score.mp3')
         this.load.audio(SoundKeys.Hit, './assets/sounds/hit.mp3')
+        this.load.audio(SoundKeys.Music, './assets/sounds/gamemusic.mp3')
+        this.load.audio(SoundKeys.Die, './assets/sounds/die.mp3')
 
         this.load.pack('preload', './assets/pack.json', 'preload');
     }

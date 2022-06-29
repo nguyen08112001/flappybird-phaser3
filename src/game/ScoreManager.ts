@@ -16,15 +16,7 @@ export default class ScoreManager extends Phaser.GameObjects.Container {
         scene.add.existing(this)
         this.displayWidthh = scene.scale.width
         this.displayHeightt = scene.scale.height
-        this.value = 0;
-        // this.scoreLabel = scene.add.text(10, 10, '' + this.value, {
-        //     fontSize: '50px',
-        //     color: '#080808',
-        //     backgroundColor: '#F8E71C',
-        //     shadow: { fill: true, blur: 0, offsetY: 0 },
-        //     padding: { left: 15, right: 15, top: 10, bottom: 10 }
-        // })
-            // .setScrollFactor(0)
+        this.value = 0
 
         this.scoreSound = scene.sound.add(SoundKeys.Score)
     
@@ -62,17 +54,6 @@ export default class ScoreManager extends Phaser.GameObjects.Container {
     
     public viewScore(scene: Phaser.Scene) {
         this.titleBitmapText.destroy()
-
-        // scene.add.text(scene.scale.width/2, scene.scale.height / 5 + 200, 'Score: ' + this.value +'\nBest: ' + this.best, {
-        //     fontSize: '50px',
-        //     color: '#080808',
-        //     backgroundColor: '#F8E71C',
-        //     shadow: { fill: true, blur: 0, offsetY: 0 },
-        //     align: 'center',
-        //     padding: { left: 15, right: 15, top: 10, bottom: 10 }
-        // })
-        //     .setOrigin(0.5, 0)
-        //     .setScrollFactor(0)
 
         scene.add.bitmapText(
             scene.scale.width/3, scene.scale.height / 5 + 200,

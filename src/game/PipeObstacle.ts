@@ -5,7 +5,6 @@ export default class PipeObstacle extends Phaser.GameObjects.Container {
     constructor(scene: Phaser.Scene, x: number, y: number) {
         super(scene,x,y)
         scene.add.existing(this)
-        // this.setFlipX()
     }
     public setRepeat(){
         this.scene.tweens.add({
@@ -14,17 +13,6 @@ export default class PipeObstacle extends Phaser.GameObjects.Container {
             ease: 'Sine.easeInOut',
             yoyo: true,
             repeat: -1
-        });
-    }
-
-    public setFlipX() {
-        this.scene.tweens.add({
-            targets: this,
-            angle: -30 ,
-            duration: 200,
-            ease: 'Sine.easeInOut',
-            yoyo: true,
-            repeat: 3
         });
     }
 }
